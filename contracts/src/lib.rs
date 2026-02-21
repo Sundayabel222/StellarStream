@@ -6,7 +6,7 @@ mod storage;
 mod types;
 
 use errors::Error;
-use soroban_sdk::{contract, contractimpl, token, Address, Env, Vec, symbol_short};
+use soroban_sdk::{contract, contractimpl, symbol_short, token, Address, Env, Vec};
 use storage::{PROPOSAL_COUNT, RECEIPT, STREAM_COUNT};
 use types::{Milestone, ReceiptMetadata, Stream, StreamProposal, StreamReceipt};
 
@@ -142,8 +142,10 @@ impl StellarStreamContract {
         env.storage().instance().set(&STREAM_COUNT, &next_id);
 
         // Emit event
-        env.events()
-            .publish((symbol_short!("create"), proposal.sender.clone()), stream_id);
+        env.events().publish(
+            (symbol_short!("create"), proposal.sender.clone()),
+            stream_id,
+        );
         Self::mint_receipt(&env, stream_id, &proposal.receiver);
 
         Ok(stream_id)
