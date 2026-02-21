@@ -262,6 +262,7 @@ impl StellarStream {
         vault_address: Option<Address>,
     ) -> u64 {
         Self::check_not_paused(&env);
+        Self::check_not_decommissioned(&env);
         sender.require_auth();
 
         // Early validation to fail fast
@@ -354,6 +355,8 @@ impl StellarStream {
         token: Address,
         requests: Vec<StreamRequest>,
     ) -> Vec<u64> {
+        Self::check_not_paused(&env);
+        Self::check_not_decommissioned(&env);
         sender.require_auth();
 
         let mut total_amount: i128 = 0;
@@ -558,6 +561,11 @@ impl StellarStream {
 
         // Get current time once
         let now = env.ledger().timestamp();
+        let is_decommissioned: bool = env
+            .storage()
+            .instance()
+            .get(&DataKey::IsDecommissioned)
+            .unwrap_or(false);
 
         // Early validation
         if now >= stream.end_time {
