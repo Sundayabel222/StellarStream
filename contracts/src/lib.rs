@@ -57,7 +57,9 @@ impl StellarStream {
 
         let stream_key = DataKey::Stream(stream_id);
         env.storage().persistent().set(&stream_key, &stream);
-        env.storage().persistent().extend_ttl(&stream_key, THRESHOLD, LIMIT);
+        env.storage()
+            .persistent()
+            .extend_ttl(&stream_key, THRESHOLD, LIMIT);
 
         env.events()
             .publish((symbol_short!("create"), sender), stream_id);
@@ -98,7 +100,9 @@ impl StellarStream {
 
         stream.withdrawn_amount += withdrawable_amount;
         env.storage().persistent().set(&stream_key, &stream);
-        env.storage().persistent().extend_ttl(&stream_key, THRESHOLD, LIMIT);
+        env.storage()
+            .persistent()
+            .extend_ttl(&stream_key, THRESHOLD, LIMIT);
 
         env.events().publish(
             (symbol_short!("withdraw"), receiver),
@@ -153,6 +157,8 @@ impl StellarStream {
 
     pub fn extend_stream_ttl(env: Env, stream_id: u64) {
         let stream_key = DataKey::Stream(stream_id);
-        env.storage().persistent().extend_ttl(&stream_key, THRESHOLD, LIMIT);
+        env.storage()
+            .persistent()
+            .extend_ttl(&stream_key, THRESHOLD, LIMIT);
     }
 }
