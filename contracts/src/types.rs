@@ -240,3 +240,11 @@ pub struct ReceiptMetadata {
     pub total_amount: i128,
     pub token: Address,
 }
+
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct AddressRestrictedEvent {
+    pub address: Address,
+    pub restricted: bool,
+    pub timestamp: u64,
+}
